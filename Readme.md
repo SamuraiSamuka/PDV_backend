@@ -1,3 +1,5 @@
+Projeto utilizado para estudar backend
+Versão atual: 1.2
 _Criado com IA_
 
 Isso é um mini-sistema real de PDV que qualquer lojinha poderia usar.

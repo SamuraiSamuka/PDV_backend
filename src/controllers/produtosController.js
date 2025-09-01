@@ -22,11 +22,7 @@ export const criar = async (req, res, next) => {
   }
 
   try {
-    const novoProduto = await produtosModel.createProduto(
-      nome,
-      preco,
-      quantidade
-    );
+    const novoProduto = await produtosModel.createProduto(nome, preco, quantidade);
     res.status(201).json({
       success: true,
       data: novoProduto,
@@ -86,12 +82,7 @@ export const atualizar = async (req, res, next) => {
   }
 
   try {
-    const produtoAtualizado = produtosModel.atualizar(
-      nome,
-      preco,
-      quantidade,
-      id
-    );
+    const produtoAtualizado = produtosModel.atualizar(nome, preco, quantidade, id);
 
     if (!produtoAtualizado) {
       return res.status(400).json({
@@ -114,48 +105,29 @@ export const modificar = async (req, res, next) => {
   const { id } = req.params;
   const { nome, preco, quantidade } = req.body;
 
-  const campos = [];
-  const valores = [];
-  let contador = 1;
-
-  if (nome !== undefined) {
-    campos.push(`nome=$${contador++}`);
-    valores.push(nome);
-  }
-
-  if (preco !== undefined) {
-    campos.push(`preco=$${contador++}`);
-    valores.push(preco);
-  }
-
-  if (quantidade !== undefined) {
-    campos.push(`quantidade=$${contador++}`);
-    valores.push(quantidade);
-  }
-
-  if (campos.length === 0) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Nenhum campo válido para atualizar." });
-  }
-
-  valores.push(id);
-
   try {
-    const result = await pool.query(
-      `UPDATE produtos SET ${campos.join(
-        ", "
-      )} WHERE id=$${contador} RETURNING *`,
-      valores
-    );
-    if (result.rows.length === 0) {
+    if (!nome && !preco && !quantidade) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Ao menos um campo deve ser fornecido para atualizar o produto.",
+        });
+    }
+    const produtoModificado = await produtosModel.modificar(id, {
+      nome,
+      preco,
+      quantidade,
+    });
+
+    if (!produtoModificado) {
       return res
         .status(404)
         .json({ success: false, message: "Produto não encontrado." });
     }
     return res.json({
       success: true,
-      data: result.rows[0],
+      data: produtoModificado,
       message: "Produto atualizado com sucesso.",
     });
   } catch (err) {
@@ -167,11 +139,8 @@ export const modificar = async (req, res, next) => {
 export const deletar = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const result = await pool.query(
-      "DELETE FROM produtos WHERE id=$1 RETURNING *",
-      [id]
-    );
-    if (result.rows.length === 0) {
+    const produtoDeletado = produtosModel.deletar(id);
+    if (!produtoDeletado) {
       return res.status(404).json({
         success: false,
         message: "Produto não encontrado.",

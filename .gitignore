@@ -1,2 +1,5 @@
 node_modules
 .env
+roteiro.md
+dist/
+Queries.sql
