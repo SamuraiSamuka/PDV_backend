@@ -1,6 +1,6 @@
 import pool from "../db/index.js";
 
-export const registrarMovimentacao = async (produtoId, tipo, quantidade) => {
+export const createStockMovement = async (produtoId, tipo, quantidade) => {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -26,4 +26,17 @@ export const registrarMovimentacao = async (produtoId, tipo, quantidade) => {
   } finally {
     client.release();
   }
+};
+
+export const listAllStockMovement = async () => {
+  const result = await pool.query("SELECT * FROM movimentacoes ORDER BY id");
+  return result.rows;
+};
+
+export const listStockMovementByProduct = async (idProduto) => {
+  const result = await pool.query(
+    `SELECT * FROM movimentacoes WHERE id=$1 ORDER BY data DESC`,
+    [[idProduto]]
+  );
+  return result.rows;
 };

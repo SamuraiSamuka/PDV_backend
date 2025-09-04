@@ -1,5 +1,4 @@
-import pool from "../db/index.js";
-import * as produtosModel from "../models/produtosModel.js";
+import * as productsModel from "../models/productsModel.js";
 
 // Códigos HTTP
 /*
@@ -22,7 +21,7 @@ export const criar = async (req, res, next) => {
   }
 
   try {
-    const novoProduto = await produtosModel.createProduto(nome, preco, quantidade);
+    const novoProduto = await productsModel.createProduct(nome, preco, quantidade);
     res.status(201).json({
       success: true,
       data: novoProduto,
@@ -36,7 +35,7 @@ export const criar = async (req, res, next) => {
 // READ ALL
 export const listar = async (req, res, next) => {
   try {
-    const produtos = await produtosModel.listarProdutos();
+    const produtos = await productsModel.listProducts();
     res.status(200).json({
       success: true,
       data: produtos,
@@ -51,7 +50,7 @@ export const listar = async (req, res, next) => {
 export const buscarUm = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const produto = await produtosModel.buscarUm(id);
+    const produto = await productsModel.findProductById(id);
     if (!produto) {
       return res.status(404).json({
         success: false,
@@ -82,7 +81,12 @@ export const atualizar = async (req, res, next) => {
   }
 
   try {
-    const produtoAtualizado = produtosModel.atualizar(nome, preco, quantidade, id);
+    const produtoAtualizado = productsModel.updateProduct(
+      nome,
+      preco,
+      quantidade,
+      id
+    );
 
     if (!produtoAtualizado) {
       return res.status(400).json({
@@ -107,14 +111,12 @@ export const modificar = async (req, res, next) => {
 
   try {
     if (!nome && !preco && !quantidade) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Ao menos um campo deve ser fornecido para atualizar o produto.",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Ao menos um campo deve ser fornecido para atualizar o produto.",
+      });
     }
-    const produtoModificado = await produtosModel.modificar(id, {
+    const produtoModificado = await productsModel.partiallyUpdateProduct(id, {
       nome,
       preco,
       quantidade,
@@ -139,7 +141,7 @@ export const modificar = async (req, res, next) => {
 export const deletar = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const produtoDeletado = produtosModel.deletar(id);
+    const produtoDeletado = productsModel.deleteProduct(id);
     if (!produtoDeletado) {
       return res.status(404).json({
         success: false,

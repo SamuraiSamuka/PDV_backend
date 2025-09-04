@@ -1,5 +1,5 @@
 Projeto utilizado para estudar backend
-Versão atual: 1.2
+Versão atual: 2
 _Criado com IA_
 
 Isso é um mini-sistema real de PDV que qualquer lojinha poderia usar.
@@ -20,6 +20,9 @@ Etapas/versões:
 - Registrar **entradas** (compra do fornecedor).
 - Registrar **saídas** (venda).
 - Atualizar quantidade automaticamente.
+
+  0.2.0 - Registro de entrada e saídas implementado. (rota movimentacoes).
+  0.2.1 -
 
 ---
 
