@@ -11,7 +11,7 @@ import * as productsModel from "../models/productsModel.js";
  */
 
 // CREATE
-export const criar = async (req, res, next) => {
+export const criarProduto = async (req, res, next) => {
   const { nome, preco, quantidade } = req.body;
   if (!nome || !preco || !quantidade) {
     return res.status(400).json({
@@ -33,7 +33,7 @@ export const criar = async (req, res, next) => {
 };
 
 // READ ALL
-export const listar = async (req, res, next) => {
+export const listarProdutos = async (req, res, next) => {
   try {
     const produtos = await productsModel.listProducts();
     res.status(200).json({
@@ -47,7 +47,7 @@ export const listar = async (req, res, next) => {
 };
 
 // READ ONE
-export const buscarUm = async (req, res, next) => {
+export const buscarProduto = async (req, res, next) => {
   const { id } = req.params;
   try {
     const produto = await productsModel.findProductById(id);
@@ -57,7 +57,7 @@ export const buscarUm = async (req, res, next) => {
         message: "Produto não encontrado.",
       });
     }
-    res.json({
+    res.status(201).json({
       success: true,
       data: produto,
       message: "Produto encontrado.",
@@ -67,8 +67,27 @@ export const buscarUm = async (req, res, next) => {
   }
 };
 
+export const buscarSaldoProduto = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const saldo = await productsModel.getProductBalance(id);
+    if (!saldo) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Produto não encontrado." });
+    }
+    res.status(201).json({
+      success: true,
+      data: saldo,
+      message: "Produto encontrado.",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // UPDATE
-export const atualizar = async (req, res, next) => {
+export const modificarProduto = async (req, res, next) => {
   const { id } = req.params;
   const { nome, preco, quantidade } = req.body;
 
@@ -105,17 +124,17 @@ export const atualizar = async (req, res, next) => {
 };
 
 // PATCH
-export const modificar = async (req, res, next) => {
+export const atualizarProdutoParcialmente = async (req, res, next) => {
   const { id } = req.params;
   const { nome, preco, quantidade } = req.body;
 
   try {
-    if (!nome && !preco && !quantidade) {
-      return res.status(400).json({
-        success: false,
-        message: "Ao menos um campo deve ser fornecido para atualizar o produto.",
-      });
-    }
+    // if (!nome && !preco && !quantidade) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Ao menos um campo deve ser fornecido para atualizar o produto.",
+    //   });
+    // }
     const produtoModificado = await productsModel.partiallyUpdateProduct(id, {
       nome,
       preco,
@@ -138,7 +157,7 @@ export const modificar = async (req, res, next) => {
 };
 
 // DELETE
-export const deletar = async (req, res, next) => {
+export const deletarProduto = async (req, res, next) => {
   const { id } = req.params;
   try {
     const produtoDeletado = productsModel.deleteProduct(id);

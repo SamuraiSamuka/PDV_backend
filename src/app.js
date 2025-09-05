@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
-import produtosRoutes from "./routes/produtos.js";
-import movimentacoesRoutes from "./routes/movimentacoes.js";
+import produtosRoutes from "./routes/productsRoutes.js";
+import movimentacoesRoutes from "./routes/movimentsRoutes.js";
 import errorHandler from "./middlewares/errorHandler.js";
 
 const app = express();

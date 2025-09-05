@@ -1,4 +1,4 @@
-import * as produtctMovementsModel from "../models/movimentacoesModel.js";
+import * as produtctMovementsModel from "../models/movimentsModel.js";
 
 export const criarMovimentacao = async (req, res, next) => {
   const { produto_id, tipo, quantidade } = req.body;

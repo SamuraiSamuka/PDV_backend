@@ -18,6 +18,13 @@ export const findProductById = async (id) => {
   return result.rows[0];
 };
 
+export const getProductBalance = async (id) => {
+  const result = await pool.query("SELECT quantidade FROM produtos WHERE id=$1", [
+    id,
+  ]);
+  return result.rows[0];
+};
+
 export const updateProduct = async (nome, preco, quantidade, id) => {
   const result = await pool.query(
     "UPDATE produtos SET nome=$1, preco=$2, quantidade=$3 WHERE id=$4 RETURNING *",
