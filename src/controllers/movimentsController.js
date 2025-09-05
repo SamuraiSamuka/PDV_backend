@@ -3,13 +3,6 @@ import * as produtctMovementsModel from "../models/movimentsModel.js";
 export const criarMovimentacao = async (req, res, next) => {
   const { produto_id, tipo, quantidade } = req.body;
   try {
-    if (!produto_id || !tipo || !quantidade) {
-      return res.status(400).json({ success: false, message: "Dados incompletos." });
-    }
-
-    if (!["entrada", "saida"].includes(tipo)) {
-      return res.status(400).json({ success: false, message: "Tipo inválido." });
-    }
     const result = await produtctMovementsModel.createStockMovement(
       produto_id,
       tipo,

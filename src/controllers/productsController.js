@@ -13,13 +13,6 @@ import * as productsModel from "../models/productsModel.js";
 // CREATE
 export const criarProduto = async (req, res, next) => {
   const { nome, preco, quantidade } = req.body;
-  if (!nome || !preco || !quantidade) {
-    return res.status(400).json({
-      success: false,
-      message: "Todos os campos (nome, preco, quantidade) são obrigatórios.",
-    });
-  }
-
   try {
     const novoProduto = await productsModel.createProduct(nome, preco, quantidade);
     res.status(201).json({
@@ -91,14 +84,6 @@ export const modificarProduto = async (req, res, next) => {
   const { id } = req.params;
   const { nome, preco, quantidade } = req.body;
 
-  if (!nome || !preco || !quantidade) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Todos os campos devem conter valores válidos. Para atualizar apenas um campo utilize o verbo PATCH.",
-    });
-  }
-
   try {
     const produtoAtualizado = productsModel.updateProduct(
       nome,
@@ -108,7 +93,7 @@ export const modificarProduto = async (req, res, next) => {
     );
 
     if (!produtoAtualizado) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: "Produto não encontrado.",
       });
@@ -129,12 +114,6 @@ export const atualizarProdutoParcialmente = async (req, res, next) => {
   const { nome, preco, quantidade } = req.body;
 
   try {
-    // if (!nome && !preco && !quantidade) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Ao menos um campo deve ser fornecido para atualizar o produto.",
-    //   });
-    // }
     const produtoModificado = await productsModel.partiallyUpdateProduct(id, {
       nome,
       preco,
