@@ -1,4 +1,5 @@
 import * as productsModel from "../models/productsModel.js";
+import { criarMovimentacao } from "./movimentsController.js";
 
 // Códigos HTTP
 /*

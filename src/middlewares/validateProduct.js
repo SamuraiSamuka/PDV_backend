@@ -3,6 +3,7 @@ import Joi from "joi";
 export const productSchema = Joi.object({
   nome: Joi.string().min(3).max(100).required().messages({
     "string.empty": "O nome é obrigatório.",
+    "string.base": "O nome deve ser um texto (string)",
     "string.min": "O nome deve ter pelo menos {#limit} caracteres.",
     "string.max": "O nome não pode ter mais de {#limit} caracteres.",
     "any.required": "O campo nome é obrigatório.",
@@ -13,8 +14,8 @@ export const productSchema = Joi.object({
     "any.required": "O campo preço é obrigatório.",
   }),
   quantidade: Joi.number().integer().min(0).required().messages({
-    "number.base": "A quantidade deve ser um número inteiro.",
     "number.min": "A quantidade não pode ser negativa.",
+    "number.integer": "A quantidade deve ser um número inteiro.",
     "any.required": "O campo quantidade é obrigatório.",
   }),
 });
